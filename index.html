@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .login-box {
+      background: white;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+    }
+    button {
+      background-color: #1877f2;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #145dbf;
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-box">
+  <h2>မိသားစုအကောင့် ဝင်ရန်</h2>
+  <p>Facebook ဖြင့် ဝင်ပါ</p>
+  <button onclick="facebookLogin()">Facebook Login</button>
+</div>
+
+<!-- Facebook SDK -->
+<script async defer crossorigin="anonymous"
+  src="https://connect.facebook.net/en_US/sdk.js"></script>
+
+<script>
+  window.fbAsyncInit = function () {
+    FB.init({
+      appId: 'YOUR_FACEBOOK_APP_ID', // ← ဒီနေရာမှာ ကိုယ့် App ID ထည့်ပါ
+      cookie: true,
+      xfbml: true,
+      version: 'v19.0'
+    });
+  };
+
+  function facebookLogin() {
+    FB.login(function (response) {
+      if (response.authResponse) {
+        FB.api('/me', function (userInfo) {
+          alert("Login အောင်မြင်ပါပြီ: " + userInfo.name);
+        });
+      } else {
+        alert("Login မအောင်မြင်ပါ");
+      }
+    }, { scope: 'public_profile,email' });
+  }
+</script>
+
+</body>
+</html>
