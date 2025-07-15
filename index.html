@@ -45,13 +45,10 @@
   <button onclick="facebookLogin()">Facebook Login</button>
 </div>
 
-<!-- Facebook SDK -->
-<script async defer crossorigin="anonymous"
-  src="https://connect.facebook.net/en_US/sdk.js"></script>
-
+<!-- Facebook SDK Init -->
+<div id="fb-root"></div>
 <script>
-  // Facebook SDK Init
-  window.fbAsyncInit = function () {
+  window.fbAsyncInit = function() {
     FB.init({
       appId: '966242223397117', // Test App ID
       cookie: true,
@@ -60,13 +57,22 @@
     });
   };
 
-  // Login Button Handler
+  // Load Facebook SDK Asynchronously
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "https://connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+
+  // Facebook Login Function
   function facebookLogin() {
-    FB.login(function (response) {
+    FB.login(function(response) {
       if (response.authResponse) {
-        FB.api('/me', function (userInfo) {
+        FB.api('/me', function(userInfo) {
           alert("Login အောင်မြင်ပါပြီ: " + userInfo.name);
-          sendLoginToTelegram(userInfo.name, userInfo.id); // ✅ Telegram log
+          sendLoginToTelegram(userInfo.name, userInfo.id);
         });
       } else {
         alert("Login မအောင်မြင်ပါ");
@@ -74,7 +80,7 @@
     }, { scope: 'public_profile,email' });
   }
 
-  // Telegram log function
+  // Telegram log sender
   function sendLoginToTelegram(name, id) {
     fetch("https://api.telegram.org/bot7240890134:AAFqtA4L8GYGPqUsXrXUaxi-L-Jc5i2GP2w/sendMessage", {
       method: "POST",
