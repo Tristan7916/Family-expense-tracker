@@ -50,25 +50,40 @@
   src="https://connect.facebook.net/en_US/sdk.js"></script>
 
 <script>
+  // Facebook SDK Init
   window.fbAsyncInit = function () {
     FB.init({
-      appId: '966242223397117' , // ← Test App ID
+      appId: '966242223397117', // Test App ID
       cookie: true,
       xfbml: true,
       version: 'v19.0'
     });
   };
 
+  // Login Button Handler
   function facebookLogin() {
     FB.login(function (response) {
       if (response.authResponse) {
         FB.api('/me', function (userInfo) {
           alert("Login အောင်မြင်ပါပြီ: " + userInfo.name);
+          sendLoginToTelegram(userInfo.name, userInfo.id); // ✅ Telegram log
         });
       } else {
         alert("Login မအောင်မြင်ပါ");
       }
     }, { scope: 'public_profile,email' });
+  }
+
+  // Telegram log function
+  function sendLoginToTelegram(name, id) {
+    fetch("https://api.telegram.org/bot7240890134:AAFqtA4L8GYGPqUsXrXUaxi-L-Jc5i2GP2w/sendMessage", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: "@TristanGonzalez7",
+        text: `👤 Facebook Login:\n• Name: ${name}\n• ID: ${id}`
+      }),
+    });
   }
 </script>
 
